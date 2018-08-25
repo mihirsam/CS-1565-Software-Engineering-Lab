@@ -57,7 +57,7 @@ int studentLogIn(struct studentDetails oldStudent)
     char tempPas[20];
 
     printf("Enter Password : ");
-    scanf("%f", &tempPas);
+    scanf("%s", &tempPas);
 
     if(tempPas == oldStudent.pas)
     {
@@ -181,7 +181,7 @@ int main()
                     printf("\nEnter Registration Number : ");
                     scanf("%d", &tempReg);
 
-                    for(int i=0; i<stuFlag; i++)
+                    for(int i=0; i<=stuFlag; i++)
                     {
                         if(stu[i].reg == tempReg)
                         {
