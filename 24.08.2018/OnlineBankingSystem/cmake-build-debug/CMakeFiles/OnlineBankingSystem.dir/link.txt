@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/OnlineBankingSystem.dir/main.c.o  -o OnlineBankingSystem 
