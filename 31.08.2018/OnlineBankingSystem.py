@@ -12,7 +12,7 @@ import random
 
 UserDetails = {}
 UserTransRecord = {}
-AdminDetails = {'admin' : 'admin123'}
+AdminDetails = {100 : 'admin123'}
 
 
 # In[ ]:
@@ -44,10 +44,16 @@ def UserReg():
 
 
 def UserLogIn():
-    accNo = int(input("Enter Account Name : "))
+    accNo = int(input("Enter Account Number : "))
     pas = input("Enter Password : ")
     
-    if accNo in UserDetails.keys():
+    if accNo in AdminDetails.keys():
+        if AdminDetails[accNo] == pas:
+            print("Log In Successful!")
+            AdminPortal()
+        else:
+            print("\nTried To Log-In Admin Account!\nWrong Password!")
+    elif accNo in UserDetails.keys():
         if UserDetails[accNo][1] == pas:
             print("\nLog-In Successful!\n")
             UserPortal(accNo)
@@ -64,7 +70,7 @@ def UserPortal(accNo):
     print("\n\nWELCOME {} TO CHOTU Sa BANK\n" .format(UserDetails[accNo][0]))
     
     while(True):
-        choice = int(input("1. Check Balance\n2. Fund Transfer\n3. Transaction History\n4. Back\n\nChoice : "))
+        choice = int(input("1. Check Balance\n2. Fund Transfer\n3. Transaction History\n4. User Details\n5. Back\n\nChoice : "))
         
         if choice == 1:
             print("\nBalance : {}\n" .format(UserDetails[accNo][3]))
@@ -76,6 +82,9 @@ def UserPortal(accNo):
             TransHist(accNo)
             
         elif choice == 4:
+            UsrDetails(accNo)
+            
+        elif choice == 5:
             break
             
         else:
@@ -94,16 +103,24 @@ def FundTransfer(accNo):
     
     if amt > UserDetails[accNo][3]:
         print("\nSorry, Insufficient Balance!")
+        
+    elif amt < 0:
+        print("\nNice Try Hacker Man!")
+        
     else:
-        UserDetails[accNo][3] -= amt
-        UserDetails[accNoTemp][3] += amt
+        if accNoTemp in UserDetails.keys():
+            UserDetails[accNo][3] -= amt
+            UserDetails[accNoTemp][3] += amt
         
-        record = (accNo, accNoTemp, amt)
-        UserTransRecord[accNo].append(record)
-        UserTransRecord[accNoTemp].append(record)
+            record = (accNo, accNoTemp, amt)
+            UserTransRecord[accNo].append(record)
+            UserTransRecord[accNoTemp].append(record)
         
-        print("\nSuccessfully Transfered {} To {}(Acc No. {})\n" .format(amt, UserDetails[accNoTemp][0], accNoTemp))
-        print("Current Account Balance : {}" .format(UserDetails[accNo][3]))
+            print("\nSuccessfully Transfered {} To {}(Acc No. {})\n" .format(amt, UserDetails[accNoTemp][0], accNoTemp))
+            print("Current Account Balance : {}" .format(UserDetails[accNo][3]))
+            
+        else:
+            print("\nUser Not Found!\nTransaction Failed!")
 
 
 # In[ ]:
@@ -116,6 +133,41 @@ def TransHist(accNo):
         print("From : {}\tTo : {}\tAmount : {}" .format(UserTransRecord[accNo][i][0], UserTransRecord[accNo][i][1], UserTransRecord[accNo][i][2]))
 
 
+# In[ ]:
+
+
+def AdminPortal():
+    print("\nWELCOME TO ADMIN PANEL OF CHOTU Sa BANK\n")
+    while(True):
+        choice = int(input("\n1. Check User Details\n2. Check Transaction\n3. Log Out\nChoice :  "))
+        
+        if choice == 1:
+            accNo = int(input("Enter Account Number : "))
+            
+            if accNo in UserDetails.keys():
+                UsrDetails(accNo)
+            else:
+                print("\nUser Not Found!\n")
+            
+        elif choice == 2:
+            accNo = int(input("Enter Account Number : "))
+            
+            if accNo in UserDetails.keys():
+                TransHist(accNo)
+            else:
+                print("\nUser Not Found!\n")
+            
+        elif choice == 3:
+            break
+        
+        else:
+            print("\nInvalid Input!\nTry again!")
+            
+# In[ ]:
+
+
+def UsrDetails(accNo):
+    print("\nUSER DETAILS\n\nName : {}\nAcc. Number : {}\nPassword : {}\n" .format(UserDetails[accNo][0], UserDetails[accNo][2], UserDetails[accNo][1]))
 # In[ ]:
 
 
