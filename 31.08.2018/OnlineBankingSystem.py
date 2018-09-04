@@ -17,6 +17,11 @@ AdminDetails = {100 : 'admin123'}
 
 # In[ ]:
 
+UserData = open("UserData.txt", "w")
+UserTrans = open("UserTrans.txt", "w")
+
+# In[ ]:
+
 
 def UserReg():
     print("\nWELCOME TO USER REGISTRATION\n")
@@ -35,7 +40,8 @@ def UserReg():
     temp = [nam, pas, accNo, bal]
     UserDetails[accNo] = temp
     UserTransRecord[accNo] = []
-    
+        
+    UserData.writelines("Name : {}\nAcc. Number : {}\nPassword : {}\n{}\n\n" .format(UserDetails[accNo][0], UserDetails[accNo][2], UserDetails[accNo][1], "-"*30))
     print("\nYour New Account Number : {}" .format(accNo))
     print("\nREGISTRATION HAS BEEN COMPLETED!")
 
@@ -116,6 +122,7 @@ def FundTransfer(accNo):
             UserTransRecord[accNo].append(record)
             UserTransRecord[accNoTemp].append(record)
         
+            UserTrans.writelines("From : {}\tTo : {}\tAmount : {}" .format(accNo, accNoTemp, amt))
             print("\nSuccessfully Transfered {} To {}(Acc No. {})\n" .format(amt, UserDetails[accNoTemp][0], accNoTemp))
             print("Current Account Balance : {}" .format(UserDetails[accNo][3]))
             
@@ -180,6 +187,8 @@ while(True):
     elif choice == 2:
         UserLogIn()
     elif choice == 3:
+        UserData.close()
+        UserTrans.close()
         break
     else:
         print("\nInvalid Input! Try again!")
