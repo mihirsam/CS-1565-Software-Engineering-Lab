@@ -6,7 +6,11 @@ BookData = {1: ["Java", 2, 1], 2 : ["DAA", 2, 1], 3 : ["COA", 2, 1], 4 : ["Maths
 
 def BookIssue():
     reg = int(input("Enter The  Registration Number : "))
-    MemDetails[reg] = []
+    
+    if reg not in MemDetails.keys():
+        MemDetails[reg] = []
+    else:
+        pass
     
     print("\nISBN\t\tBook Name\t\tNumber Of Books\n")
     for i in BookData.keys():
@@ -34,38 +38,63 @@ def BookIssue():
         
 def ReturnBook():
     reg = int(input("Enter The Registartion Number : "))
+    ret = 0
     
-    print("\nISBN\t\tNAME\t\t\tRETURN STATUS\t\tTIME\n")
-    
-    for i in range(0, len(MemDetails[reg])):
-        print("{}\t\t{}\t\t{}\t\t{}" .format(MemDetails[reg][i][0], BookData[MemDetails[reg][i][0]][0], MemDetails[reg][i][2], (time.time() - MemDetails[reg][i][1])))
-        
-    choice = int(input("Enter The ISBN To Return : "))
-    
-    for i in range(0, len(MemDetails[reg])):
-        if choice == MemDetails[reg][i][0]:
-            MemDetails[reg][i][2] = "Yes"
-            print("\nBook Has Been Returned")            
-            if time.time() - MemDetails[reg][i][1] > 60:
-                print("FINE : {}", format((60 - time.time() - MemDetails[reg][i][1]) * 2))
+    if reg in MemDetails.keys():
+        print("\nISBN\t\tNAME\t\tRETURN STATUS\t\tTIME\n")
+
+        for i in range(0, len(MemDetails[reg])):
+            print("{}\t\t{}\t\t{}\t\t\t{}" .format(MemDetails[reg][i][0], BookData[MemDetails[reg][i][0]][0], MemDetails[reg][i][2], time.time() - MemDetails[reg][i][1]))
+
+        choice = int(input("Enter The ISBN To Return : "))
+
+        for i in range(0, len(MemDetails[reg])):
+            if choice == MemDetails[reg][i][0] and MemDetails[reg][i][2] == "No":
+                MemDetails[reg][i][2] = "Yes"
+                BookData[choice][1] += 1
+                
+                if BookData[choice][1] == 0:
+                    BookData[choice][2] = 0
+                else:
+                    BookData[choice][2] = 1
+                    
+                print("\nBook Has Been Returned")            
+                if time.time() - MemDetails[reg][i][1] > 60:
+                    print("FINE : Rs. {}" .format((time.time() - MemDetails[reg][i][1] - 60) * 2))
+                else:
+                    print("FINE : 0")
+
+                ret = 1
+
+            elif choice == MemDetails[reg][i][0] and MemDetails[reg][i][2] == "Yes":
+                print("\nBook Has Already Been Returned\n")
+                ret = 1
+                
             else:
-                print("FINE : 0")
-        else:
+                pass
+        
+        if ret != 1:
             print("\nWrong ISBN Number\n")
+    
+    else:
+        print("\nMember Not Found\n")
             
             
 def MemDet():
     reg = int(input("Enter The Registartion Number : "))
     
-    print("\nISBN\t\tNAME\t\t\tRETURN STATUS\t\tTIME\n")
+    if reg in MemDetails.keys():
+        print("\nISBN\t\tNAME\t\tRETURN STATUS\t\tTIME\n")
     
-    for i in range(0, len(MemDetails[reg])):
-        print("{}\t\t{}\t\t{}\t\t{}" .format(MemDetails[reg][i][0], BookData[MemDetails[reg][i][0]][0], MemDetails[reg][i][2], (time.time() - MemDetails[reg][i][1])))
+        for i in range(0, len(MemDetails[reg])):
+            print("{}\t\t{}\t\t{}\t\t\t{}" .format(MemDetails[reg][i][0], BookData[MemDetails[reg][i][0]][0], MemDetails[reg][i][2], (time.time() - MemDetails[reg][i][1])))
+    else:
+        print("\nMember Not Found\n")
 
 while(True):
     print("\nWELCOME TO LIBRARY MANAGEMENT SYSTEM\n")
     
-    print("1. Book Issue\n2. Return Book\n3. Member Details\n4. Exit\n\nChoice : ")
+    print("1. Book Issue\n2. Return Book\n3. Member Details\n4. Exit\n\n")
     choice = int(input("Choice : "))
     
     if choice == 1:
